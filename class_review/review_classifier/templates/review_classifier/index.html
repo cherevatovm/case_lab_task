@@ -1,5 +1,99 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <title>Review Classifier</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e9ebee;
+            display: flex;
+            justify-content: center;
+        }
+        .container {          
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 150px;
+        }
+        h1, h2 {
+            color: #444;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            resize: vertical;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            color: #555;
+            transition: border 0.3s ease;
+        }
+        textarea:focus {
+            border: 1px solid #8664be;
+        }
+        button {
+            background-color: #8664be;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+            margin-bottom: 20px;
+        }
+        button:hover {
+            background-color: #5e4685;
+        }
+        #result, #rating {
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
 <body>
-    <h1>review_classifier</h1>
+    <div class="container">
+        <h1>Классификация отзывов</h1>
+        <h2>Оставьте ваш отзыв на английском языке</h2>
+        <form id="review-form" method="post">
+            {% csrf_token %}
+            <textarea name="review_text" id="review-text" rows="4" cols="50"></textarea><br><br>
+            <button type="submit">Классифицировать</button>
+        </form>
+        <div id="result">
+            <p class="label">Мнение о фильме:</p>
+            <p id="result-text"></p>
+        </div>
+        <div id="rating">
+            <p class="label">Примерная оценка:</p>
+            <p id="rating-text"></p>
+        </div>
+    </div>
+    <script>
+        document.getElementById('review-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            fetch('{% url "classify" %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
+                },
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result-text').innerText = data.label;
+                document.getElementById('rating-text').innerText = data.rating;
+            });
+        });
+    </script>
 </body>
+</html>
+
