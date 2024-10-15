@@ -2,11 +2,6 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-from nltk.stem.snowball import SnowballStemmer
-
-def snowball_tokenizer(text):
-    snowball = SnowballStemmer('english')
-    return [snowball.stem(w) for w in text.split()]
 
 def main():
     """Run administrative tasks."""

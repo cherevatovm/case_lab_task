@@ -64,7 +64,7 @@
         <h2>Оставьте ваш отзыв на английском языке</h2>
         <form id="review-form" method="post">
             {% csrf_token %}
-            <textarea name="review_text" id="review-text" rows="4" cols="50"></textarea><br><br>
+            <textarea name="review_text" id="review-text" rows="4" cols="50" required></textarea><br><br>
             <button type="submit">Классифицировать</button>
         </form>
         <div id="result">
